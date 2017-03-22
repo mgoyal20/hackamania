@@ -8,6 +8,8 @@ import logging
 from logging import Formatter, FileHandler
 from forms import *
 import os
+from flask import json
+import urllib2
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -51,15 +53,25 @@ def about():
     return render_template('pages/placeholder.about.html')
 
 
-@app.route('/login')
+@app.route('/login',methods=['GET','POST'])
 def login():
-    form = LoginForm(request.form)
-    return render_template('forms/login.html', form=form)
-
+    forms= LoginForm(request.form)
+    return render_template('forms/login.html', form=forms)
 
 @app.route('/register')
 def register():
     form = RegisterForm(request.form)
+    if request.method == "POST":
+        user = request.form['name']
+        pswd = request.form['password']
+        data = json.dumps({"username": user, "password": pswd, "requestCode": "LOGIN"}).encode('utf-8')
+        u = urllib2.Request("http://10.20.3.111:6000/", data, {"Content-Type": "application/json"})
+        f = urllib2.urlopen(u)
+        response = f.read()
+        f.close()
+        print data
+        print u
+        print response
     return render_template('forms/register.html', form=form)
 
 
