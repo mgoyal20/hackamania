@@ -2,7 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,session
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
@@ -56,15 +56,10 @@ def about():
 @app.route('/login',methods=['GET','POST'])
 def login():
     forms= LoginForm(request.form)
-    return render_template('forms/login.html', form=forms)
-
-@app.route('/register')
-def register():
-    form = RegisterForm(request.form)
     if request.method == "POST":
         user = request.form['name']
         pswd = request.form['password']
-        print user,pswd
+        print user, pswd
         data = json.dumps({"username": user, "password": pswd, "requestCode": "LOGIN"}).encode('utf-8')
         u = urllib2.Request("http://10.20.3.111:6000/", data, {"Content-Type": "application/json"})
         f = urllib2.urlopen(u)
@@ -73,7 +68,56 @@ def register():
         print data
         print u
         print response
+        session['username']=user
+    return render_template('forms/login.html', form=forms)
+
+@app.route('/register',methods=['GET','POST'])
+def register():
+    form = RegisterForm(request.form)
+    u=session['username']
+    print u
+    if request.method == "POST":
+        user = request.form['name']
+        pswd = request.form['password']
+        email=request.form['email']
+        pswd2=request.form['confirm']
+        phone=request.form['phone']
+        address=request.form['address']
+        print user, pswd
+        if pswd==pswd2:
+            data = json.dumps({"username": user, "password": pswd,"email":email,"contact":phone,"address":address, "requestCode": "REGISTER"}).encode('utf-8')
+            u = urllib2.Request("http://10.20.3.111:6000/", data, {"Content-Type": "application/json"})
+            f = urllib2.urlopen(u)
+            response = f.read()
+            f.close()
+            print data
+            print u
+            print response
+        else:
+            return render_template('forms/register.html', form=form)
     return render_template('forms/register.html', form=form)
+
+@app.route('/post',methods=['GET','POST'])
+def post():
+    form = PostForm(request.form)
+    if request.method == "POST":
+        user="a"
+        phone="b"
+        email="c"
+        address="d"
+        title = request.form['title']
+        category = request.form['category']
+        details=request.form['details']
+        postDate=request.form['postDate']
+        data = json.dumps({"username": user, "title": title,"category":category,"details":details,"postDate":postDate,"contact":phone,"email":email,"address":address, "requestCode": "CREATE_POST"}).encode('utf-8')
+        u = urllib2.Request("http://10.20.3.111:6000/", data, {"Content-Type": "application/json"})
+        f = urllib2.urlopen(u)
+        response = f.read()
+        f.close()
+        print data
+        print u
+        print response
+    return render_template('forms/post.html', form=form)
 
 
 @app.route('/forgot')
