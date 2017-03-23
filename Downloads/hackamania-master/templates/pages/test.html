@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>JSON Jquery AJAx</title></head>
+<body>
+<ul></ul>
+    <script type=text/javascript src="jquery-3.1.1.min.js"></script>
+    <script type=text/javascript>
+    $(document).ready(function() {
+
+        $.getJSON('http://10.20.3.111:6000/',function (data) {
+
+            $.each(data.posts, function () {
+
+                $("ul").append("<li>" + this['category'] + "</li>" + "<li>" + this['title'] + "</li>");
+            });
+
+        });
+    });
+  </script>
+<p>Kuch nahi ho raha</p>
+  </body>
+</html>

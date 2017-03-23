@@ -29,6 +29,7 @@
 <!-- /favicons -->
 
 <!-- scripts -->
+<script src="js/json2.js"></script>
 <script src="/static/js/libs/modernizr-2.8.2.min.js"></script>
 <!--[if lt IE 9]><script src="/static/js/libs/respond-1.4.2.min.js"></script><![endif]-->
 <!-- /scripts -->
@@ -114,6 +115,23 @@
     load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
   });
   </script>
+  <script>
+var obj= JSON.stringify({{string}},null,4);
+document.write("<h1>Idented 4 spaces</h1> <pre>"+identedText+"</pre>");
+    
+    /* Create a string serialization of the "deepObject" JS Oject */
+var jsonString = JSON.stringify({{string}});
+    
+    /* ouput the JSON string to html */
+document.write("<h1>Unidented</h1> <pre>"+jsonString+"</pre>");
+    
+    /* Convert the jsonString into Javascript object */
+var newObject = JSON.parse(jsonString);
+    
+    /* output the javascript object to HTML */
+document.write("<h1>JS Object</h1>" + newObject);
+ 
+</script>
 
 </body>
 </html>

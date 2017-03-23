@@ -59,9 +59,9 @@ def about():
     print u
     print response
     res = json.loads(response)
-    for i in res['POSTS']:
+    for i in res['posts']:
         print i['Category']
-    return render_template('pages/placeholder.about.html')
+    return render_template('pages/test.html')
 
 
 @app.route('/login',methods=['GET','POST'])
